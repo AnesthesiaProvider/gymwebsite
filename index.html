@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iron Discipline - Gym Workout App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="gymfav.png">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-black py-4 px-6 flex justify-between items-center border-b border-red-600 sticky top-0 z-10 transition-all duration-300 hover:py-5 hover:shadow-lg hover:shadow-red-900/20">
+        <div class="flex items-center">
+            <i class="fas fa-dumbbell text-red-600 text-2xl mr-2 animate-bounce"></i>
+            <h1 class="text-2xl font-bold bg-gradient-to-r from-red-600 to-orange-500 bg-clip-text text-transparent animate-pulse">
+                IRON DISCIPLINE
+            </h1>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button id="loginBtn" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">
+                <i class="fas fa-user mr-2"></i>Login
+            </button>
+            <button id="musicToggle" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full">
+                <i class="fas fa-music"></i>
+            </button>
+            <button id="voiceToggle" class="bg-red-600 hover:bg-red-700 text-white p-2 rounded-full">
+                <i class="fas fa-volume-up"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- Daily Navigation -->
+        <div class="mb-8 overflow-x-auto">
+            <div class="flex space-x-2 min-w-max">
+                <button class="day-btn py-2 px-4 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all" data-day="monday">Monday</button>
+                <button class="day-btn py-2 px-4 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all" data-day="tuesday">Tuesday</button>
+                <button class="day-btn py-2 px-4 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all" data-day="wednesday">Wednesday</button>
+                <button class="day-btn py-2 px-4 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all" data-day="thursday">Thursday</button>
+                <button class="day-btn py-2 px-4 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all" data-day="friday">Friday</button>
+                <button class="day-btn py-2 px-4 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all" data-day="saturday">Saturday</button>
+                <button class="day-btn py-2 px-4 rounded-lg bg-gray-800 hover:bg-gray-700 transition-all" data-day="sunday">Sunday</button>
+            </div>
+        </div>
+
+        <!-- Current Day Display -->
+        <div class="mb-8">
+            <h2 id="currentDay" class="text-3xl font-bold mb-2 text-red-600">Monday</h2>
+            <p id="motivationalQuote" class="text-gray-300 italic">"Discipline is choosing between what you want now and what you want most."</p>
+        </div>
+
+        <!-- Timer Section -->
+        <div id="timerSection" class="mb-8 bg-gray-900 p-6 rounded-xl border border-gray-800 slide-in hover:shadow-lg hover:shadow-red-900/10 transition-all-slow" data-aos="fade-up">
+            <div class="section-header">
+                <h3 class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-stopwatch mr-3 text-red-600"></i> Workout Timer
+                </h3>
+            </div>
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="flex flex-col items-center mb-6 md:mb-0">
+                    <div class="timer-circle rounded-full flex items-center justify-center mb-4">
+                        <span id="timerDisplay" class="text-4xl font-bold">05:00</span>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button id="startTimer" class="bg-red-600 hover:bg-red-700 text-white py-3 px-8 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-red-900/30">
+                            <i class="fas fa-play mr-2"></i> Start
+                        </button>
+                        <button id="pauseTimer" class="bg-gray-700 hover:bg-gray-600 text-white py-3 px-8 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-gray-900/20">
+                            <i class="fas fa-pause mr-2"></i> Pause
+                        </button>
+                        <button id="resetTimer" class="bg-gray-700 hover:bg-gray-600 text-white py-3 px-8 rounded-lg font-medium transition-all duration-300 shadow-lg hover:shadow-gray-900/20">
+                            <i class="fas fa-redo mr-2"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2">Exercise Duration (seconds)</label>
+                        <input id="exerciseDuration" type="number" value="60" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 px-4 text-white">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-400 mb-2">Rest Duration (seconds)</label>
+                        <input id="restDuration" type="number" value="30" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 px-4 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 mb-2">Motivational Voice</label>
+                        <select id="voicePhrase" class="w-full bg-gray-800 border border-gray-700 rounded-lg py-2 px-4 text-white">
+                            <option value="Push through it!">Push through it!</option>
+                            <option value="No pain, no gain!">No pain, no gain!</option>
+                            <option value="One more rep!">One more rep!</option>
+                            <option value="You got this!">You got this!</option>
+                            <option value="Don't quit now!">Don't quit now!</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workout Plan Section -->
+        <div id="workoutPlan" class="mb-8">
+            <!-- Warm-up Section -->
+            <div class="mb-8 bg-gray-900 p-6 rounded-xl border border-gray-800 slide-in">
+                <div class="section-header">
+                    <h3 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-fire mr-3 text-red-600"></i> Warm-up (5-10 minutes)
+                    </h3>
+                </div>
+                <ul id="warmupList" class="space-y-3">
+                    <!-- Dynamically filled -->
+                </ul>
+                <div class="warmup-timer-container mt-4 hidden">
+                    <div class="flex items-center justify-center mb-4">
+                        <div class="timer-circle rounded-full flex items-center justify-center mb-4">
+                            <span class="warmup-timer-display text-4xl font-bold">05:00</span>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4 justify-center">
+                        <button class="warmup-start-btn bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded-lg">
+                            <i class="fas fa-play"></i> Start
+                        </button>
+                        <button class="warmup-pause-btn bg-gray-700 hover:bg-gray-600 text-white py-2 px-6 rounded-lg">
+                            <i class="fas fa-pause"></i> Pause
+                        </button>
+                        <button class="warmup-reset-btn bg-gray-700 hover:bg-gray-600 text-white py-2 px-6 rounded-lg">
+                            <i class="fas fa-redo"></i> Reset
+                        </button>
+                    </div>
+                </div>
+                <button class="show-warmup-timer-btn mt-4 bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded-lg">
+                    <i class="fas fa-stopwatch mr-2"></i> Start Warm-up Timer
+                </button>
+            </div>
+
+            <!-- Workout Section -->
+            <div class="mb-8 bg-gray-900 p-6 rounded-xl border border-gray-800 slide-in">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="section-header">
+                        <h3 class="text-xl font-semibold flex items-center">
+                            <i class="fas fa-dumbbell mr-3 text-red-600"></i> Workout
+                        </h3>
+                    </div>
+                    <button id="addExerciseBtn" class="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded-lg text-sm">
+                        <i class="fas fa-plus mr-1"></i> Add Exercise
+                    </button>
+                </div>
+                <div id="workoutExercises" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dynamically filled -->
+                </div>
+            </div>
+
+            <!-- Cool-down Section -->
+            <div class="mb-8 bg-gray-900 p-6 rounded-xl border border-gray-800 slide-in">
+                <div class="section-header">
+                    <h3 class="text-xl font-semibold flex items-center">
+                        <i class="fas fa-wind mr-3 text-red-600"></i> Cool-down & Stretching
+                    </h3>
+                </div>
+                <ul id="cooldownList" class="space-y-3">
+                    <!-- Dynamically filled -->
+                </ul>
+                <button class="mt-4 bg-red-600 hover:bg-red-700 text-white py-2 px-6 rounded-lg">
+                    <i class="fas fa-stopwatch mr-2"></i> Start Cool-down Timer
+                </button>
+            </div>
+        </div>
+
+        <!-- Nutrition Section -->
+        <div id="nutritionSection" class="mb-8 bg-gray-900 p-6 rounded-xl border border-gray-800 slide-in">
+            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fas fa-utensils mr-2 text-red-600"></i> Nutrition Plan
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Protein -->
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="flex items-center mb-3">
+                        <div class="muscle-icon bg-red-600">
+                            <i class="fas fa-egg"></i>
+                        </div>
+                        <h4 class="font-semibold">Protein Sources</h4>
+                    </div>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Active Panner CHOTA BHAI</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Milk</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> yogurt</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Cerals</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Paneer (Indian cottage cheese)</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Lentils (Dal)</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Chickpeas</li>
+                    </ul>
+                </div>
+                
+                <!-- Carbs -->
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="flex items-center mb-3">
+                        <div class="muscle-icon bg-red-600">
+                            <i class="fas fa-bread-slice"></i>
+                        </div>
+                        <h4 class="font-semibold">Complex Carbs</h4>
+                    </div>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Brown rice</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Quinoa</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Sweet potatoes</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Whole wheat bread</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Roti (Indian whole wheat flatbread)</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Oats</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Millet (Bajra/Jowar)</li>
+                    </ul>
+                </div>
+                
+                <!-- Fats -->
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="flex items-center mb-3">
+                        <div class="muscle-icon bg-red-600">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h4 class="font-semibold">Healthy Fats</h4>
+                    </div>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Avocados</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Nuts (almonds, walnuts)</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Olive oil</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Chia seeds</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Flaxseeds</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Ghee (Clarified butter)</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Coconut</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Indian Vegetarian Meal Plan -->
+            <div class="mt-6 bg-gray-800 p-4 rounded-lg">
+                <h4 class="font-semibold mb-3 flex items-center">
+                    <i class="fas fa-leaf mr-2 text-red-600"></i> Indian Vegetarian Meal Plan
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <h5 class="text-red-500 mb-2">Breakfast</h5>
+                        <ul class="space-y-1 text-gray-300">
+                            <li>• Poha with peanuts & veggies</li>
+                            <li>• Besan chilla with mint chutney</li>
+                            <li>• Sprouts salad with lemon</li>
+                            <li>• 1 glass milk with protein powder</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="text-red-500 mb-2">Lunch</h5>
+                        <ul class="space-y-1 text-gray-300">
+                            <li>• 2 Roti + Dal + Sabzi</li>
+                            <li>• Brown rice + Rajma curry</li>
+                            <li>• Curd + Salad</li>
+                            <li>• Handful of nuts</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="text-red-500 mb-2">Dinner</h5>
+                        <ul class="space-y-1 text-gray-300">
+                            <li>• Khichdi with ghee</li>
+                            <li>• Palak paneer with roti</li>
+                            <li>• Moong dal chilla</li>
+                            <li>• Warm turmeric milk</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Supplements -->
+            <div class="mt-6 bg-gray-800 p-4 rounded-lg">
+                <h4 class="font-semibold mb-3 flex items-center">
+                    <i class="fas fa-pills mr-2 text-red-600"></i> Supplement Tips
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h5 class="text-red-500 mb-2">Essential</h5>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start">
+                                <i class="fas fa-capsules text-red-600 mt-1 mr-2"></i>
+                                <span><strong>Whey Protein</strong> - 1 scoop post-workout for muscle recovery</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-capsules text-red-600 mt-1 mr-2"></i>
+                                <span><strong>Creatine</strong> - 5g daily for strength and performance</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-capsules text-red-600 mt-1 mr-2"></i>
+                                <span><strong>Multivitamin</strong> - To cover micronutrient needs</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="text-red-500 mb-2">Optional</h5>
+                        <ul class="space-y-2 text-gray-300">
+                            <li class="flex items-start">
+                                <i class="fas fa-capsules text-red-600 mt-1 mr-2"></i>
+                                <span><strong>BCAAs</strong> - During workout for endurance</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-capsules text-red-600 mt-1 mr-2"></i>
+                                <span><strong>Omega-3</strong> - For joint and heart health</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-capsules text-red-600 mt-1 mr-2"></i>
+                                <span><strong>Vitamin D</strong> - Especially if limited sun exposure</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rest Day Section (Hidden by default) -->
+        <div id="restDaySection" class="mb-8 bg-gray-900 p-6 rounded-xl border border-gray-800 hidden">
+            <h3 class="text-xl font-semibold mb-4 flex items-center">
+                <i class="fas fa-bed mr-2 text-red-600"></i> Rest & Recovery Day
+            </h3>
+            <p class="text-gray-300 mb-4">Your muscles grow when you rest, not when you train. Today is for active recovery and preparation for the next week's challenges.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Active Recovery -->
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-3 flex items-center">
+                        <i class="fas fa-walking mr-2 text-red-600"></i> Active Recovery
+                    </h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Light yoga (20-30 min)</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Walking (30-45 min)</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Mobility exercises</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Foam rolling</li>
+                    </ul>
+                </div>
+                
+                <!-- Mental Recovery -->
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-3 flex items-center">
+                        <i class="fas fa-brain mr-2 text-red-600"></i> Mental Recovery
+                    </h4>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Meditation (10-15 min)</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Journaling</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Visualization of goals</li>
+                        <li class="flex items-center"><i class="fas fa-check-circle text-red-600 mr-2"></i> Digital detox (1-2 hrs)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Sleep Advice -->
+            <div class="mt-6 bg-gray-800 p-4 rounded-lg">
+                <h4 class="font-semibold mb-3 flex items-center">
+                    <i class="fas fa-moon mr-2 text-red-600"></i> Sleep Optimization
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <h5 class="text-red-500 mb-2">Before Bed</h5>
+                        <ul class="space-y-1 text-gray-300">
+                            <li>• No caffeine after 2PM</li>
+                            <li>• Dim lights 1 hour before</li>
+                            <li>• No screens 30 min before</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="text-red-500 mb-2">Sleep Environment</h5>
+                        <ul class="space-y-1 text-gray-300">
+                            <li>• Cool room (18-20°C)</li>
+                            <li>• Complete darkness</li>
+                            <li>• Comfortable mattress</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="text-red-500 mb-2">Sleep Duration</h5>
+                        <ul class="space-y-1 text-gray-300">
+                            <li>• 7-9 hours nightly</li>
+                            <li>• Consistent bedtime</li>
+                            <li>• 20-30 min naps if needed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Photos Section -->
+        <div class="mb-8 bg-gray-900 p-6 rounded-xl border border-gray-800 slide-in">
+            <div class="section-header">
+                <h3 class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-camera-retro mr-3 text-red-600"></i> Progress Photos
+                </h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-3">Upload New Photo</h4>
+                    <div class="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center">
+                        <input type="file" id="progressPhotoUpload" accept="image/*" class="hidden">
+                        <label for="progressPhotoUpload" class="cursor-pointer">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-500 mb-2"></i>
+                            <p class="text-gray-400">Click to upload or drag and drop</p>
+                            <p class="text-sm text-gray-500 mt-2">JPG, PNG up to 5MB</p>
+                        </label>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-gray-400 mb-2">Date</label>
+                        <input type="date" id="photoDate" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-gray-400 mb-2">Notes</label>
+                        <textarea id="photoNotes" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white" rows="3"></textarea>
+                    </div>
+                    <button id="saveProgressPhoto" class="mt-4 w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg">
+                        Save Progress Photo
+                    </button>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-3">Your Progress Timeline</h4>
+                    <div id="progressTimeline" class="space-y-4 max-h-96 overflow-y-auto">
+                        <!-- Photos will be added here dynamically -->
+                        <p class="text-gray-500 text-center py-8">No progress photos yet. Upload your first one!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workout Playlist -->
+        <div class="mb-8 bg-gray-900 p-6 rounded-xl border border-gray-800 slide-in">
+            <div class="section-header">
+                <h3 class="text-xl font-semibold flex items-center">
+                    <i class="fas fa-headphones mr-3 text-red-600"></i> Workout Playlists
+                </h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition cursor-pointer" onclick="playVideo('D2CKOIiabfg')">
+                    <div class="flex items-center mb-3">
+                        <img src="https://img.youtube.com/vi/D2CKOIiabfg/mqdefault.jpg" alt="Thumbnail" class="w-16 h-16 rounded mr-3">
+                        <div>
+                            <h4 class="font-medium">Gym Workout Music</h4>
+                            <p class="text-sm text-gray-400">Powerful Training Mix</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition cursor-pointer" onclick="playVideo('9bZkp7q19f0')">
+                    <div class="flex items-center mb-3">
+                        <img src="https://img.youtube.com/vi/9bZkp7q19f0/mqdefault.jpg" alt="Thumbnail" class="w-16 h-16 rounded mr-3">
+                        <div>
+                            <h4 class="font-medium">Gangnam Style</h4>
+                            <p class="text-sm text-gray-400">Viral Workout Song</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition cursor-pointer" onclick="playVideo('JGwWNGJdvx8')">
+                    <div class="flex items-center mb-3">
+                        <img src="https://img.youtube.com/vi/JGwWNGJdvx8/mqdefault.jpg" alt="Thumbnail" class="w-16 h-16 rounded mr-3">
+                        <div>
+                            <h4 class="font-medium">EDM Workout Mix</h4>
+                            <p class="text-sm text-gray-400">High Energy Training</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition cursor-pointer" onclick="playVideo('RgKAFK5djSk')">
+                    <div class="flex items-center mb-3">
+                        <img src="https://img.youtube.com/vi/RgKAFK5djSk/mqdefault.jpg" alt="Thumbnail" class="w-16 h-16 rounded mr-3">
+                        <div>
+                            <h4 class="font-medium">Hip Hop Workout</h4>
+                            <p class="text-sm text-gray-400">Lifting Motivation</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition cursor-pointer" onclick="playVideo('dQw4w9WgXcQ')">
+                    <div class="flex items-center mb-3">
+                        <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" alt="Thumbnail" class="w-16 h-16 rounded mr-3">
+                        <div>
+                            <h4 class="font-medium">Never Gonna Give You Up</h4>
+                            <p class="text-sm text-gray-400">Classic Workout Song</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-800 p-4 rounded-lg hover:bg-gray-700 transition cursor-pointer" onclick="playVideo('kXYiU_JCYtU')">
+                    <div class="flex items-center mb-3">
+                        <img src="https://img.youtube.com/vi/kXYiU_JCYtU/mqdefault.jpg" alt="Thumbnail" class="w-16 h-16 rounded mr-3">
+                        <div>
+                            <h4 class="font-medium">EDM Bangers</h4>
+                            <p class="text-sm text-gray-400">Non-Stop Workout Mix</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Video Modal -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
+        <div class="relative w-full max-w-4xl">
+            <div class="absolute -top-10 right-0 flex space-x-4">
+                <button id="backgroundPlayBtn" class="text-white text-2xl" title="Play in background">
+                    <i class="fas fa-window-minimize"></i>
+                </button>
+                <button id="closeModal" class="text-white text-2xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="aspect-w-16 aspect-h-9">
+                <iframe id="videoPlayer" class="w-full h-96 md:h-[500px]" frameborder="0" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Profile Modal -->
+    <div id="profileModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-xl font-semibold mb-4">User Profile</h3>
+            <div class="space-y-4">
+                <div class="flex justify-center mb-4">
+                    <div class="relative">
+                        <img id="profileImage" src="https://via.placeholder.com/150" class="w-24 h-24 rounded-full object-cover border-2 border-red-600">
+                        <input type="file" id="profileImageUpload" accept="image/*" class="hidden">
+                        <button id="changeProfileImage" class="absolute bottom-0 right-0 bg-red-600 text-white p-2 rounded-full">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-400 mb-2">Name</label>
+                    <input id="userName" type="text" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-400 mb-2">Age</label>
+                        <input id="userAge" type="number" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 mb-2">Gender</label>
+                        <select id="userGender" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-400 mb-2">Height (cm)</label>
+                        <input id="userHeight" type="number" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 mb-2">Weight (kg)</label>
+                        <input id="userWeight" type="number" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-400 mb-2">Fitness Goal</label>
+                    <select id="userGoal" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                        <option value="weight_loss">Weight Loss</option>
+                        <option value="muscle_gain">Muscle Gain</option>
+                        <option value="strength">Strength</option>
+                        <option value="endurance">Endurance</option>
+                        <option value="general_fitness">General Fitness</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-gray-400 mb-2">Preferred Workout Types</label>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox bg-gray-700 border-gray-600" value="strength">
+                            <span class="ml-2 text-gray-300">Strength</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox bg-gray-700 border-gray-600" value="cardio">
+                            <span class="ml-2 text-gray-300">Cardio</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox bg-gray-700 border-gray-600" value="yoga">
+                            <span class="ml-2 text-gray-300">Yoga</span>
+                        </label>
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" class="form-checkbox bg-gray-700 border-gray-600" value="hiit">
+                            <span class="ml-2 text-gray-300">HIIT</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button id="cancelProfileEdit" class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg">
+                        Cancel
+                    </button>
+                    <button id="saveProfile" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg">
+                        Save Profile
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exercise Edit Modal -->
+    <div id="exerciseModal" class="fixed inset-0 bg-black bg-opacity-90 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <h3 class="text-xl font-semibold mb-4">Edit Exercise</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-gray-400 mb-2">Exercise Name</label>
+                    <input id="exerciseName" type="text" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-400 mb-2">Sets</label>
+                        <input id="exerciseSets" type="number" min="1" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                    </div>
+                    <div>
+                        <label class="block text-gray-400 mb-2">Reps</label>
+                        <input id="exerciseReps" type="text" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-400 mb-2">Muscle Group</label>
+                    <select id="exerciseMuscle" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-white">
+                        <option value="fas fa-fire bg-red-600">Chest</option>
+                        <option value="fas fa-tshirt bg-green-500">Back</option>
+                        <option value="fas fa-running bg-purple-500">Legs</option>
+                        <option value="fas fa-user bg-orange-500">Shoulders</option>
+                        <option value="fas fa-hand-rock bg-yellow-500">Arms</option>
+                        <option value="fas fa-ellipsis-h bg-pink-500">Core</option>
+                    </select>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button id="cancelExerciseEdit" class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg">
+                        Cancel
+                    </button>
+                    <button id="saveExercise" class="bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mini Player (hidden by default) -->
+    <div id="miniPlayer" class="fixed bottom-4 right-4 bg-black bg-opacity-80 rounded-lg p-3 hidden z-50">
+        <div class="flex items-center space-x-3">
+            <button id="restorePlayer" class="text-white">
+                <i class="fas fa-window-maximize"></i>
+            </button>
+            <button id="closeMiniPlayer" class="text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <audio id="backgroundAudio" controls class="w-64"></audio>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black py-6 px-4 border-t border-gray-800">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <div class="flex items-center">
+                        <i class="fas fa-dumbbell text-red-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold">IRON DISCIPLINE</span>
+                    </div>
+                    <p class="text-gray-500 mt-2">Transform your body, strengthen your mind.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-red-600"><i class="fab fa-instagram text-2xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-red-600"><i class="fab fa-youtube text-2xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-red-600"><i class="fab fa-twitter text-2xl"></i></a>
+                </div>
+            </div>
+            <div class="mt-6 pt-6 border-t border-gray-800 text-center text-gray-500">
+                <p>&copy; 2023 Iron Discipline. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        // Ad blocking for YouTube embeds
+        function blockYTAds() {
+            // Remove YouTube ads from embedded players
+            const iframes = document.getElementsByTagName('iframe');
+            for (let iframe of iframes) {
+                if (iframe.src.includes('youtube.com/embed')) {
+                    // Remove ads by modifying the URL
+                    if (!iframe.src.includes('&rel=0')) {
+                        iframe.src += (iframe.src.includes('?') ? '&' : '?') + 'rel=0&modestbranding=1';
+                    }
+                }
+            }
+            
+            // Block YouTube tracking
+            Object.defineProperty(document, 'referrer', {
+                get: function() { return 'https://www.youtube.com'; }
+            });
+            
+            // Block ad-related requests
+            const originalFetch = window.fetch;
+            window.fetch = function(url, init) {
+                if (typeof url === 'string' && 
+                    (url.includes('doubleclick.net') || 
+                     url.includes('googleadservices') || 
+                     url.includes('googlesyndication'))) {
+                    return Promise.reject(new Error('Ad request blocked'));
+                }
+                return originalFetch(url, init);
+            };
+        }
+        
+        // Run ad blocking when video is played
+        function playVideo(videoId) {
+            blockYTAds();
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+            document.getElementById('videoModal').classList.remove('hidden');
+        }
+    </script>
+    <script>
+        // Initialize AOS (Animate On Scroll)
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out-quad',
+            once: true,
+            offset: 100
+        });
+
+        // Add scroll animations to elements
+        document.querySelectorAll('.day-btn').forEach((btn, index) => {
+            btn.style.animationDelay = `${index * 50}ms`;
+        });
+
+        // Remove parallax effect from header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            header.style.transform = 'none';
+        });
+
+        // Smooth hover transitions for all interactive elements
+        document.querySelectorAll('button, a, .exercise-card, .day-btn').forEach(el => {
+            el.classList.add('transform', 'transition-all', 'duration-300', 'ease-out');
+            el.style.transform = 'translateX(0)';
+        });
+        // Set current day
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const today = new Date().getDay();
+        let currentDay = today === 0 ? 1 : today; // Skip Sunday for workout days
+        
+        // Initialize the app with Monday as default
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDay(currentDay);
+            setupTimer();
+            setupDayButtons();
+            setupMusicToggle();
+            setupVoiceToggle();
+            setupVideoModal();
+            setupExerciseEditing();
+            
+            // Set motivational quote
+            const quotes = [
+                "Discipline is choosing between what you want now and what you want most.",
+                "The only bad workout is the one that didn't happen.",
+                "Strength doesn't come from what you can do. It comes from overcoming the things you once thought you couldn't.",
+                "Don't stop when you're tired. Stop when you're done.",
+                "Your body can stand almost anything. It's your mind that you have to convince.",
+                "Success starts with self-discipline.",
+                "The pain you feel today will be the strength you feel tomorrow."
+            ];
+            document.getElementById('motivationalQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+        });
+        
+        function updateDay(dayIndex) {
+            const dayName = days[dayIndex];
+            document.getElementById('currentDay').textContent = dayName;
+            
+            // Highlight active day button
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.classList.remove('day-active');
+                if (btn.dataset.day.toLowerCase() === dayName.toLowerCase()) {
+                    btn.classList.add('day-active');
+                }
+            });
+            
+            // Show/hide workout or rest day content
+            if (dayName === 'Sunday') {
+                document.getElementById('workoutPlan').classList.add('hidden');
+                document.getElementById('nutritionSection').classList.add('hidden');
+                document.getElementById('restDaySection').classList.remove('hidden');
+            } else {
+                document.getElementById('workoutPlan').classList.remove('hidden');
+                document.getElementById('nutritionSection').classList.remove('hidden');
+                document.getElementById('restDaySection').classList.add('hidden');
+                
+                // Update workout plan based on day
+                updateWorkoutPlan(dayName);
+            }
+        }
+        
+        function updateWorkoutPlan(dayName) {
+            const warmupList = document.getElementById('warmupList');
+            const workoutExercises = document.getElementById('workoutExercises');
+            const cooldownList = document.getElementById('cooldownList');
+            
+            // Clear previous content
+            warmupList.innerHTML = '';
+            workoutExercises.innerHTML = '';
+            cooldownList.innerHTML = '';
+            
+            // Common warm-up and cool-down
+            const warmupExercises = [
+                "5 min light cardio (treadmill/bike)",
+                "Arm circles (30 sec forward, 30 sec backward)",
+                "Leg swings (30 sec each leg)",
+                "Bodyweight squats (2 sets of 15 reps)",
+                "Shoulder rolls (30 sec)"
+            ];
+            
+            const cooldownExercises = [
+                "5 min light walking",
+                "Hamstring stretch (30 sec each leg)",
+                "Quad stretch (30 sec each leg)",
+                "Shoulder stretch (30 sec each arm)",
+                "Child's pose (1 min)"
+            ];
+            
+            // Add warm-up
+            warmupExercises.forEach(ex => {
+                const li = document.createElement('li');
+                li.className = 'flex items-center';
+                li.innerHTML = `
+                    <i class="fas fa-check-circle text-gray-600 mr-3"></i>
+                    <span>${ex}</span>
+                `;
+                warmupList.appendChild(li);
+            });
+            
+            // Add cool-down
+            cooldownExercises.forEach(ex => {
+                const li = document.createElement('li');
+                li.className = 'flex items-center';
+                li.innerHTML = `
+                    <i class="fas fa-check-circle text-gray-600 mr-3"></i>
+                    <span>${ex}</span>
+                `;
+                cooldownList.appendChild(li);
+            });
+            
+            // Day-specific workouts
+            let exercises = [];
+            let workoutTitle = '';
+            
+            switch(dayName.toLowerCase()) {
+                case 'monday':
+                    workoutTitle = 'Chest & Triceps';
+                    exercises = [
+                        { name: 'Bench Press', sets: '4', reps: '8-10', muscle: 'fas fa-fire', iconColor: 'bg-red-600' },
+                        { name: 'Incline Dumbbell Press', sets: '3', reps: '10-12', muscle: 'fas fa-fire', iconColor: 'bg-red-600' },
+                        { name: 'Chest Fly Machine', sets: '3', reps: '12-15', muscle: 'fas fa-fire', iconColor: 'bg-red-600' },
+                        { name: 'Triceps Dips', sets: '3', reps: '10-12', muscle: 'fas fa-hand-paper', iconColor: 'bg-blue-500' },
+                        { name: 'Triceps Rope Pushdown', sets: '3', reps: '12-15', muscle: 'fas fa-hand-paper', iconColor: 'bg-blue-500' }
+                    ];
+                    break;
+                case 'tuesday':
+                    workoutTitle = 'Back & Biceps';
+                    exercises = [
+                        { name: 'Pull-ups', sets: '4', reps: '6-8', muscle: 'fas fa-tshirt', iconColor: 'bg-green-500' },
+                        { name: 'Barbell Rows', sets: '3', reps: '8-10', muscle: 'fas fa-tshirt', iconColor: 'bg-green-500' },
+                        { name: 'Lat Pulldown', sets: '3', reps: '10-12', muscle: 'fas fa-tshirt', iconColor: 'bg-green-500' },
+                        { name: 'Dumbbell Bicep Curls', sets: '3', reps: '10-12', muscle: 'fas fa-hand-rock', iconColor: 'bg-yellow-500' },
+                        { name: 'Hammer Curls', sets: '3', reps: '12-15', muscle: 'fas fa-hand-rock', iconColor: 'bg-yellow-500' }
+                    ];
+                    break;
+                case 'wednesday':
+                    workoutTitle = 'Legs';
+                    exercises = [
+                        { name: 'Squats', sets: '4', reps: '8-10', muscle: 'fas fa-running', iconColor: 'bg-purple-500' },
+                        { name: 'Leg Press', sets: '3', reps: '10-12', muscle: 'fas fa-running', iconColor: 'bg-purple-500' },
+                        { name: 'Romanian Deadlifts', sets: '3', reps: '8-10', muscle: 'fas fa-running', iconColor: 'bg-purple-500' },
+                        { name: 'Leg Extensions', sets: '3', reps: '12-15', muscle: 'fas fa-running', iconColor: 'bg-purple-500' },
+                        { name: 'Calf Raises', sets: '4', reps: '15-20', muscle: 'fas fa-running', iconColor: 'bg-purple-500' }
+                    ];
+                    break;
+                case 'thursday':
+                    workoutTitle = 'Shoulders & Abs';
+                    exercises = [
+                        { name: 'Overhead Press', sets: '4', reps: '8-10', muscle: 'fas fa-user', iconColor: 'bg-orange-500' },
+                        { name: 'Lateral Raises', sets: '3', reps: '12-15', muscle: 'fas fa-user', iconColor: 'bg-orange-500' },
+                        { name: 'Front Plate Raises', sets: '3', reps: '12-15', muscle: 'fas fa-user', iconColor: 'bg-orange-500' },
+                        { name: 'Hanging Leg Raises', sets: '3', reps: '12-15', muscle: 'fas fa-ellipsis-h', iconColor: 'bg-pink-500' },
+                        { name: 'Cable Crunches', sets: '3', reps: '15-20', muscle: 'fas fa-ellipsis-h', iconColor: 'bg-pink-500' }
+                    ];
+                    break;
+                case 'friday':
+                    workoutTitle = 'Full Body';
+                    exercises = [
+                        { name: 'Deadlifts', sets: '4', reps: '6-8', muscle: 'fas fa-dumbbell', iconColor: 'bg-red-600' },
+                        { name: 'Pull-ups', sets: '3', reps: '8-10', muscle: 'fas fa-tshirt', iconColor: 'bg-green-500' },
+                        { name: 'Dips', sets: '3', reps: '10-12', muscle: 'fas fa-fire', iconColor: 'bg-red-600' },
+                        { name: 'Bulgarian Split Squats', sets: '3', reps: '10-12', muscle: 'fas fa-running', iconColor: 'bg-purple-500' },
+                        { name: 'Farmers Walk', sets: '3', reps: '30 sec', muscle: 'fas fa-dumbbell', iconColor: 'bg-red-600' }
+                    ];
+                    break;
+                case 'saturday':
+                    workoutTitle = 'Conditioning';
+                    exercises = [
+                        { name: 'Battle Ropes', sets: '4', reps: '30 sec', muscle: 'fas fa-bolt', iconColor: 'bg-yellow-500' },
+                        { name: 'Box Jumps', sets: '3', reps: '10-12', muscle: 'fas fa-running', iconColor: 'bg-purple-500' },
+                        { name: 'Kettlebell Swings', sets: '3', reps: '15-20', muscle: 'fas fa-dumbbell', iconColor: 'bg-red-600' },
+                        { name: 'Sled Push', sets: '3', reps: '30 sec', muscle: 'fas fa-running', iconColor: 'bg-purple-500' },
+                        { name: 'Rowing Machine', sets: '3', reps: '500m', muscle: 'fas fa-tshirt', iconColor: 'bg-green-500' }
+                    ];
+                    break;
+            }
+            
+            // Add workout title
+            const titleDiv = document.createElement('div');
+            titleDiv.className = 'col-span-full mb-4';
+            titleDiv.innerHTML = `<h4 class="text-lg font-semibold text-red-600">${workoutTitle}</h4>`;
+            workoutExercises.appendChild(titleDiv);
+            
+            // Add exercises
+            exercises.forEach(ex => {
+                const card = document.createElement('div');
+                card.className = 'exercise-card bg-gray-800 p-4 rounded-lg cursor-pointer hover:border-red-600 border border-gray-700';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="flex items-center">
+                            <div class="muscle-icon ${ex.iconColor}">
+                                <i class="${ex.muscle} text-white"></i>
+                            </div>
+                            <h4 class="font-medium" contenteditable="true">${ex.name}</h4>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-gray-700 text-white py-1 px-3 rounded-full text-sm" contenteditable="true">${ex.sets} x ${ex.reps}</span>
+                            <button class="edit-exercise-btn text-gray-400 hover:text-red-600">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="delete-exercise-btn text-gray-400 hover:text-red-600">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="exercise-details hidden mt-3 p-3 bg-gray-700 rounded-lg text-sm">
+                        <p class="mb-2">Focus on proper form and controlled movements.</p>
+                        <p>Rest 60-90 seconds between sets.</p>
+                    </div>
+                    <div class="flex justify-between items-center mt-4">
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="hidden">
+                            <span class="w-8 h-5 flex items-center bg-gray-600 rounded-full p-1 duration-300 ease-in-out group">
+                                <span class="bg-white w-3 h-3 rounded-full shadow-md transform duration-300 ease-in-out group-hover:translate-x-1"></span>
+                            </span>
+                            <span class="ml-2 text-sm text-gray-400">Done</span>
+                        </label>
+                    </div>
+                `;
+                
+                // Make entire card clickable for details
+                card.addEventListener('click', function(e) {
+                    // Don't trigger if clicking the toggle
+                    if (e.target.closest('label')) {
+                        const toggle = card.querySelector('input[type="checkbox"]');
+                        toggle.checked = !toggle.checked;
+                        
+                        const toggleSpan = card.querySelector('span:not(.ml-2)');
+                        const doneText = card.querySelector('.ml-2');
+                        
+                        if(toggle.checked) {
+                            toggleSpan.classList.add('bg-green-500');
+                            toggleSpan.querySelector('span').classList.add('translate-x-3');
+                            doneText.textContent = 'Done';
+                            doneText.classList.remove('text-gray-400');
+                            doneText.classList.add('text-green-500');
+                        } else {
+                            toggleSpan.classList.remove('bg-green-500');
+                            toggleSpan.querySelector('span').classList.remove('translate-x-3');
+                            doneText.textContent = 'Done';
+                            doneText.classList.add('text-gray-400');
+                            doneText.classList.remove('text-green-500');
+                        }
+                        return;
+                    }
+                    
+                    // Toggle details visibility
+                    const details = card.querySelector('.exercise-details');
+                    details.classList.toggle('hidden');
+                });
+                
+                workoutExercises.appendChild(card);
+            });
+        }
+        
+        function setupDayButtons() {
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const dayName = this.dataset.day;
+                    const dayIndex = days.findIndex(d => d.toLowerCase() === dayName.toLowerCase());
+                    currentDay = dayIndex;
+                    updateDay(currentDay);
+                });
+            });
+        }
+        
+        function setupTimer() {
+            let timer;
+            let timeLeft = 300; // 5 minutes in seconds
+            let isRunning = false;
+            let isExercisePhase = true;
+            
+            const timerDisplay = document.getElementById('timerDisplay');
+            const startBtn = document.getElementById('startTimer');
+            const pauseBtn = document.getElementById('pauseTimer');
+            const resetBtn = document.getElementById('resetTimer');
+            const exerciseDurationInput = document.getElementById('exerciseDuration');
+            const restDurationInput = document.getElementById('restDuration');
+            const voicePhraseSelect = document.getElementById('voicePhrase');
+            
+            function updateDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            function startTimer() {
+                if (!isRunning) {
+                    isRunning = true;
+                    document.querySelector('.timer-circle').classList.add('active');
+                    timer = setInterval(() => {
+                        timeLeft--;
+                        updateDisplay();
+                        
+                        if (timeLeft <= 0) {
+                            clearInterval(timer);
+                            isRunning = false;
+                            
+                            // Play motivational voice
+                            if (document.getElementById('voiceToggle').classList.contains('bg-red-600')) {
+                                const phrase = voicePhraseSelect.value;
+                                speak(phrase);
+                            }
+                            
+                            // Switch between exercise and rest
+                            if (isExercisePhase) {
+                                timeLeft = parseInt(restDurationInput.value);
+                                isExercisePhase = false;
+                                startTimer();
+                            } else {
+                                timeLeft = parseInt(exerciseDurationInput.value);
+                                isExercisePhase = true;
+                            }
+                        }
+                    }, 1000);
+                }
+            }
+            
+            function pauseTimer() {
+                clearInterval(timer);
+                isRunning = false;
+                document.querySelector('.timer-circle').classList.remove('active');
+                document.querySelector('.timer-circle').style.transform = 'scale(1)';
+            }
+            
+            function resetTimer() {
+                clearInterval(timer);
+                isRunning = false;
+                isExercisePhase = true;
+                timeLeft = parseInt(exerciseDurationInput.value);
+                updateDisplay();
+                document.querySelector('.timer-circle').classList.remove('active');
+                document.querySelector('.timer-circle').style.transform = 'scale(1)';
+            }
+            
+            function speak(text) {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.rate = 0.9;
+                    utterance.pitch = 0.8;
+                    speechSynthesis.speak(utterance);
+                }
+            }
+            
+            startBtn.addEventListener('click', startTimer);
+            pauseBtn.addEventListener('click', pauseTimer);
+            resetBtn.addEventListener('click', resetTimer);
+            
+            exerciseDurationInput.addEventListener('change', function() {
+                if (!isRunning && isExercisePhase) {
+                    timeLeft = parseInt(this.value);
+                    updateDisplay();
+                }
+            });
+            
+            restDurationInput.addEventListener('change', function() {
+                if (!isRunning && !isExercisePhase) {
+                    timeLeft = parseInt(this.value);
+                    updateDisplay();
+                }
+            });
+            
+            // Initialize timer display
+            updateDisplay();
+
+            // Warm-up timer functionality
+            document.querySelectorAll('.show-warmup-timer-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const container = this.nextElementSibling;
+                    container.classList.remove('hidden');
+                    this.classList.add('hidden');
+                });
+            });
+
+            document.querySelectorAll('.warmup-start-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const container = this.closest('.warmup-timer-container');
+                    container.querySelector('.timer-circle').classList.add('active');
+                });
+            });
+
+            document.querySelectorAll('.warmup-pause-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const container = this.closest('.warmup-timer-container');
+                    container.querySelector('.timer-circle').classList.remove('active');
+                });
+            });
+
+            document.querySelectorAll('.warmup-reset-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const container = this.closest('.warmup-timer-container');
+                    container.querySelector('.timer-circle').classList.remove('active');
+                    container.querySelector('.warmup-timer-display').textContent = '05:00';
+                });
+            });
+        }
+        
+        function setupMusicToggle() {
+            const musicToggle = document.getElementById('musicToggle');
+            let isMusicOn = false;
+            let audio;
+            
+            musicToggle.addEventListener('click', function() {
+                isMusicOn = !isMusicOn;
+                
+                if (isMusicOn) {
+                    this.classList.add('pulse');
+                    this.innerHTML = '<i class="fas fa-music"></i>';
+                    // In a real app, this would play background music
+                    // For demo purposes, we'll just show the state
+                } else {
+                    this.classList.remove('pulse');
+                    this.innerHTML = '<i class="fas fa-music"></i>';
+                    // Stop music
+                    if (audio) {
+                        audio.pause();
+                        audio = null;
+                    }
+                }
+            });
+        }
+        
+        function setupVoiceToggle() {
+            const voiceToggle = document.getElementById('voiceToggle');
+            let isVoiceOn = true;
+            
+            voiceToggle.addEventListener('click', function() {
+                isVoiceOn = !isVoiceOn;
+                
+                if (isVoiceOn) {
+                    this.classList.add('bg-red-600');
+                    this.classList.remove('bg-gray-700');
+                } else {
+                    this.classList.remove('bg-red-600');
+                    this.classList.add('bg-gray-700');
+                }
+            });
+        }
+        
+        let currentEditingCard = null;
+        
+        function setupExerciseEditing() {
+            const exerciseModal = document.getElementById('exerciseModal');
+            const addExerciseBtn = document.getElementById('addExerciseBtn');
+            const cancelExerciseEdit = document.getElementById('cancelExerciseEdit');
+            const saveExercise = document.getElementById('saveExercise');
+            
+            // Add new exercise
+            addExerciseBtn.addEventListener('click', function() {
+                document.getElementById('exerciseName').value = '';
+                document.getElementById('exerciseSets').value = '3';
+                document.getElementById('exerciseReps').value = '8-12';
+                document.getElementById('exerciseMuscle').value = 'fas fa-fire bg-red-600';
+                currentEditingCard = null;
+                exerciseModal.classList.remove('hidden');
+            });
+            
+            // Edit existing exercise
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.edit-exercise-btn')) {
+                    const card = e.target.closest('.exercise-card');
+                    const name = card.querySelector('h4').textContent;
+                    const [sets, reps] = card.querySelector('span').textContent.split(' x ');
+                    const muscleIcon = card.querySelector('.muscle-icon');
+                    const muscleClass = `${muscleIcon.querySelector('i').className} ${muscleIcon.className}`;
+                    
+                    document.getElementById('exerciseName').value = name;
+                    document.getElementById('exerciseSets').value = sets;
+                    document.getElementById('exerciseReps').value = reps;
+                    document.getElementById('exerciseMuscle').value = muscleClass;
+                    currentEditingCard = card;
+                    exerciseModal.classList.remove('hidden');
+                }
+                
+                // Delete exercise
+                if (e.target.closest('.delete-exercise-btn')) {
+                    if (confirm('Are you sure you want to delete this exercise?')) {
+                        e.target.closest('.exercise-card').remove();
+                    }
+                }
+            });
+            
+            // Save exercise
+            saveExercise.addEventListener('click', function() {
+                const name = document.getElementById('exerciseName').value;
+                const sets = document.getElementById('exerciseSets').value;
+                const reps = document.getElementById('exerciseReps').value;
+                const [muscleIcon, iconColor] = document.getElementById('exerciseMuscle').value.split(' ');
+                
+                if (!name || !sets || !reps) {
+                    alert('Please fill all fields');
+                    return;
+                }
+                
+                if (currentEditingCard) {
+                    // Update existing card
+                    currentEditingCard.querySelector('h4').textContent = name;
+                    currentEditingCard.querySelector('span').textContent = `${sets} x ${reps}`;
+                    const muscleDiv = currentEditingCard.querySelector('.muscle-icon');
+                    muscleDiv.className = `muscle-icon ${iconColor}`;
+                    muscleDiv.innerHTML = `<i class="${muscleIcon} text-white"></i>`;
+                } else {
+                    // Create new card
+                    const exercisesContainer = document.getElementById('workoutExercises');
+                    const card = document.createElement('div');
+                    card.className = 'exercise-card bg-gray-800 p-4 rounded-lg cursor-pointer hover:border-red-600 border border-gray-700';
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <div class="flex items-center">
+                                <div class="muscle-icon ${iconColor}">
+                                    <i class="${muscleIcon} text-white"></i>
+                                </div>
+                                <h4 class="font-medium" contenteditable="true">${name}</h4>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-gray-700 text-white py-1 px-3 rounded-full text-sm" contenteditable="true">${sets} x ${reps}</span>
+                                <button class="edit-exercise-btn text-gray-400 hover:text-red-600">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="delete-exercise-btn text-gray-400 hover:text-red-600">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="exercise-details hidden mt-3 p-3 bg-gray-700 rounded-lg text-sm">
+                            <p class="mb-2">Focus on proper form and controlled movements.</p>
+                            <p>Rest 60-90 seconds between sets.</p>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <label class="inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="hidden">
+                                <span class="w-8 h-5 flex items-center bg-gray-600 rounded-full p-1 duration-300 ease-in-out group">
+                                    <span class="bg-white w-3 h-3 rounded-full shadow-md transform duration-300 ease-in-out group-hover:translate-x-1"></span>
+                                </span>
+                                <span class="ml-2 text-sm text-gray-400">Done</span>
+                            </label>
+                        </div>
+                    `;
+                    exercisesContainer.appendChild(card);
+                }
+                
+                exerciseModal.classList.add('hidden');
+            });
+            
+            // Cancel edit
+            cancelExerciseEdit.addEventListener('click', function() {
+                exerciseModal.classList.add('hidden');
+            });
+        }
+        
+        function setupVideoModal() {
+            const videoModal = document.getElementById('videoModal');
+            const videoPlayer = document.getElementById('videoPlayer');
+            const closeModal = document.getElementById('closeModal');
+            const backgroundPlayBtn = document.getElementById('backgroundPlayBtn');
+            const miniPlayer = document.getElementById('miniPlayer');
+            const restorePlayer = document.getElementById('restorePlayer');
+            const closeMiniPlayer = document.getElementById('closeMiniPlayer');
+            const backgroundAudio = document.getElementById('backgroundAudio');
+            
+            function playVideo(videoId) {
+                videoPlayer.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                videoModal.classList.remove('hidden');
+                
+                // Extract audio stream URL (this would need a proper backend service in production)
+                backgroundAudio.src = `https://ytproxy.example.com/audio?id=${videoId}`;
+            }
+            
+            closeModal.addEventListener('click', function() {
+                videoPlayer.src = '';
+                videoModal.classList.add('hidden');
+            });
+            
+            backgroundPlayBtn.addEventListener('click', function() {
+                videoModal.classList.add('hidden');
+                miniPlayer.classList.remove('hidden');
+                backgroundAudio.play();
+            });
+            
+            restorePlayer.addEventListener('click', function() {
+                miniPlayer.classList.add('hidden');
+                videoModal.classList.remove('hidden');
+                backgroundAudio.pause();
+            });
+            
+            closeMiniPlayer.addEventListener('click', function() {
+                miniPlayer.classList.add('hidden');
+                backgroundAudio.pause();
+                backgroundAudio.src = '';
+            });
+            
+            videoModal.addEventListener('click', function(e) {
+                if (e.target === videoModal) {
+                    videoPlayer.src = '';
+                    videoModal.classList.add('hidden');
+                }
+            });
+        }
+
+        // Progress Photos Functionality
+        document.getElementById('saveProgressPhoto').addEventListener('click', function() {
+            const fileInput = document.getElementById('progressPhotoUpload');
+            const dateInput = document.getElementById('photoDate');
+            const notesInput = document.getElementById('photoNotes');
+            
+            if (!fileInput.files.length) {
+                alert('Please select a photo');
+                return;
+            }
+            
+            if (!dateInput.value) {
+                alert('Please select a date');
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                const photoData = {
+                    date: dateInput.value,
+                    notes: notesInput.value,
+                    image: e.target.result
+                };
+                
+                // Save to localStorage (in a real app, this would go to a database)
+                let progressPhotos = JSON.parse(localStorage.getItem('progressPhotos') || '[]');
+                progressPhotos.push(photoData);
+                localStorage.setItem('progressPhotos', JSON.stringify(progressPhotos));
+                
+                // Display the new photo
+                displayProgressPhoto(photoData);
+                
+                // Clear the form
+                fileInput.value = '';
+                dateInput.value = '';
+                notesInput.value = '';
+            };
+            
+            reader.readAsDataURL(file);
+        });
+
+        function displayProgressPhoto(photoData) {
+            const timeline = document.getElementById('progressTimeline');
+            
+            // Remove the "no photos" message if it exists
+            if (timeline.querySelector('p.text-center')) {
+                timeline.innerHTML = '';
+            }
+            
+            const photoElement = document.createElement('div');
+            photoElement.className = 'bg-gray-700 p-4 rounded-lg';
+            photoElement.innerHTML = `
+                <div class="flex justify-between items-start mb-2">
+                    <span class="text-sm text-gray-400">${new Date(photoData.date).toLocaleDateString()}</span>
+                    <button class="delete-photo-btn text-gray-400 hover:text-red-600">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                <div class="mb-3">
+                    <img src="${photoData.image}" alt="Progress photo" class="w-full h-48 object-cover rounded-lg">
+                </div>
+                <p class="text-gray-300 text-sm">${photoData.notes || 'No notes'}</p>
+            `;
+            
+            timeline.prepend(photoElement);
+            
+            // Add delete functionality
+            photoElement.querySelector('.delete-photo-btn').addEventListener('click', function() {
+                if (confirm('Delete this progress photo?')) {
+                    let progressPhotos = JSON.parse(localStorage.getItem('progressPhotos') || '[]');
+                    progressPhotos = progressPhotos.filter(photo => 
+                        photo.date !== photoData.date || photo.image !== photoData.image
+                    );
+                    localStorage.setItem('progressPhotos', JSON.stringify(progressPhotos));
+                    photoElement.remove();
+                    
+                    // Show "no photos" message if empty
+                    if (document.getElementById('progressTimeline').children.length === 0) {
+                        document.getElementById('progressTimeline').innerHTML = 
+                            '<p class="text-gray-500 text-center py-8">No progress photos yet. Upload your first one!</p>';
+                    }
+                }
+            });
+        }
+
+        // Load existing photos on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const progressPhotos = JSON.parse(localStorage.getItem('progressPhotos') || '[]');
+            if (progressPhotos.length > 0) {
+                document.getElementById('progressTimeline').innerHTML = '';
+                progressPhotos.forEach(photo => displayProgressPhoto(photo));
+            }
+        });
+
+        // Profile functionality
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            document.getElementById('profileModal').classList.remove('hidden');
+            loadProfile();
+        });
+
+        document.getElementById('changeProfileImage').addEventListener('click', function() {
+            document.getElementById('profileImageUpload').click();
+        });
+
+        document.getElementById('profileImageUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('profileImage').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function loadProfile() {
+            const profile = JSON.parse(localStorage.getItem('userProfile')) || {};
+            
+            if (profile.name) {
+                document.getElementById('userName').value = profile.name;
+                document.getElementById('userAge').value = profile.age || '';
+                document.getElementById('userGender').value = profile.gender || 'male';
+                document.getElementById('userHeight').value = profile.height || '';
+                document.getElementById('userWeight').value = profile.weight || '';
+                document.getElementById('userGoal').value = profile.goal || 'general_fitness';
+                
+                if (profile.image) {
+                    document.getElementById('profileImage').src = profile.image;
+                }
+                
+                // Set workout type checkboxes
+                const workoutTypes = profile.workoutTypes || [];
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = workoutTypes.includes(checkbox.value);
+                });
+            }
+        }
+
+        document.getElementById('saveProfile').addEventListener('click', function() {
+            const profile = {
+                name: document.getElementById('userName').value,
+                age: document.getElementById('userAge').value,
+                gender: document.getElementById('userGender').value,
+                height: document.getElementById('userHeight').value,
+                weight: document.getElementById('userWeight').value,
+                goal: document.getElementById('userGoal').value,
+                image: document.getElementById('profileImage').src,
+                workoutTypes: Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value)
+            };
+            
+            localStorage.setItem('userProfile', JSON.stringify(profile));
+            document.getElementById('profileModal').classList.add('hidden');
+            
+            // Update UI to show logged in state
+            document.getElementById('loginBtn').innerHTML = 
+                `<i class="fas fa-user mr-2"></i>${profile.name || 'Profile'}`;
+        });
+
+        document.getElementById('cancelProfileEdit').addEventListener('click', function() {
+            document.getElementById('profileModal').classList.add('hidden');
+        });
+
+        // Check if user already has a profile
+        if (localStorage.getItem('userProfile')) {
+            const profile = JSON.parse(localStorage.getItem('userProfile'));
+            document.getElementById('loginBtn').innerHTML = 
+                `<i class="fas fa-user mr-2"></i>${profile.name || 'Profile'}`;
+        }
+
+        // Register service worker for background playback
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(function(registration) {
+                console.log('ServiceWorker registration successful');
+            }).catch(function(err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+        }
+    </script>
+</body>
+</html>
